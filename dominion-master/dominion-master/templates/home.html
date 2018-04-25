@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="https://github.com/cypressf/dominion"><img id="github_ribbon" src="{{ url_for('static', filename='forkme.png') }}" alt="Fork me on GitHub"></a>
+
+<section id="form">
+    <form method="GET" action="#randomize">
+        {% for e in all_expansions %}
+        <input type="checkbox" name="expansion" value="{{ e }}"{% if e in expansions %} checked{% endif %} id="check_{{e}}">
+        <label for="check_{{e}}">{{ e }}</label>
+        {% endfor %}
+        <input type="submit" value="Randomize!" id="randomize">
+    </form>
+</section>
+
+<section id="cards">
+    {% for expansion in cards %}
+    <div id="{{ expansion }}" class="expansion">
+    <h1>{{ expansion }}</h1>
+    <ul>
+        {% for c in cards[expansion] %}
+        <li>{{ c }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    randomizer.init();
+</script>
+{% endblock %}
