@@ -4,6 +4,8 @@ from random import *
 import PIL
 from PIL import ImageTk
 from PIL import Image
+import requests
+from io import BytesIO
 
 db = sqlite3.connect("cards.db")
 c = db.cursor()
@@ -79,8 +81,9 @@ def generateItems():
 label = Message(m, textvariable = var)
 enter = Button(top, text= "generate", command = generateItems)
 top.add(enter)
-pathToImage = "foobar.jpg"
-im = Image.open(pathToImage)
+url = "http://dominion.diehrstraits.com/scans/base/cellar.jpg"
+response = requests.get(url)
+im = Image.open(BytesIO(response.content))
 ph = ImageTk.PhotoImage(im)
 
 label = Label(m, image=ph)
