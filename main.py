@@ -39,19 +39,23 @@ var.set("choose items then press generate")
 def generateItems():
     numChosen = 0
     while (numChosen < 10):
-        count = c.execute("select count(*) from cards")
-        id = random() * count + 1
-        c.execute("select * from cards where id = ?", id )
+        c.execute("select count(*) from cards")
+        counts = c.fetchone()
+        count = counts[0]
+        # print( count[0])
+        id = int(random() * int(count) + 1)
+        # print(id)/
+        c.execute("select * from cards where id = ?", (id,) )
         rows = c.fetchall()
-        noteRows = []
-        for row in rows:
-            if rows.get
+        print(rows)
+        numChosen+=1
+
 
 
 
 label = Message(top, textvariable = var)
 enter = Button(top, text = "generate", command = generateItems)
 
-enter.pack();
-label.pack();
+enter.pack()
+label.pack()
 top.mainloop()

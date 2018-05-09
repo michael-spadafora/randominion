@@ -15,6 +15,14 @@ c.execute("CREATE TABLE IF NOT EXISTS cards (id, name, cost_treasure, descriptio
 # for card in c.fetchall():
 #     print(card)
 i = 0
+
+#
+# c.execute("select id, name from cards")
+# ids = c.fetchall()
+#
+# for id in ids:
+#     print(id)
+
 # for set in js:
 #
 #     # print('cb' + str(i) + ' = Checkbutton(top,text = "' + set +  '", variable=' + set.lower() + ')')
