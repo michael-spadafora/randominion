@@ -1,13 +1,15 @@
 import sqlite3
-from pprint import pprint
 from tkinter import *
 from random import *
-
+import PIL
+from PIL import ImageTk
+from PIL import Image
 
 db = sqlite3.connect("cards.db")
 c = db.cursor()
 
-top = Tk()
+m = Tk()
+top = PanedWindow(orient = VERTICAL)
 
 promo = IntVar()
 dominion       = IntVar()
@@ -33,7 +35,7 @@ cb9 = Checkbutton(top,text = "Alchemy", variable=alchemy)
 checkbuttons = [cb1, cb2, cb3, cb4,cb5,cb6,cb7,cb8,cb9]
 
 for butt in checkbuttons:
-    butt.pack()
+    top.add(butt)
 var = StringVar();
 var.set("choose items then press generate")
 
@@ -54,7 +56,7 @@ def generateItems():
     cardsInSets = []
     validIdNumbers = []
     for set in sets:
-        print(set)
+        # print(set)
         c.execute("select id from cards where expansion = ?", (set,) )
         nums = c.fetchall()
         # print(nums)
@@ -74,12 +76,17 @@ def generateItems():
     print(cardsInSets)
 
 
+label = Message(m, textvariable = var)
+enter = Button(top, text= "generate", command = generateItems)
+top.add(enter)
+pathToImage = "foobar.jpg"
+im = Image.open(pathToImage)
+ph = ImageTk.PhotoImage(im)
 
+label = Label(m, image=ph)
+label.image=ph
 
-
-label = Message(top, textvariable = var)
-enter = Button(top, text = "generate", command = generateItems)
-
-enter.pack()
-label.pack()
-top.mainloop()
+top.pack(side = LEFT)
+# enter.pack(side = LEFT)
+label.pack(side = RIGHT)
+m.mainloop()
