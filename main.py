@@ -36,19 +36,43 @@ for butt in checkbuttons:
     butt.pack()
 var = StringVar();
 var.set("choose items then press generate")
+
+def getCheckedButtons():
+    checkedarr = []
+    i = 0
+    while i<len(checked):
+        tmp = checked[i]
+        if checked[i].get() == 1:
+            string = checkbuttons[i].cget("text")
+            checkedarr.append(string)
+        i+=1
+    return checkedarr
+
 def generateItems():
     numChosen = 0
+    sets = getCheckedButtons()
+    cardsInSets = []
+    validIdNumbers = []
+    for set in sets:
+        print(set)
+        c.execute("select id from cards where expansion = ?", (set,) )
+        nums = c.fetchall()
+        # print(nums)
+        for returnz in nums:
+            validIdNumbers.append(returnz[0])
+
+    count = len(validIdNumbers)
+    # print(count)
     while (numChosen < 10):
-        c.execute("select count(*) from cards")
-        counts = c.fetchone()
-        count = counts[0]
-        # print( count[0])
-        id = int(random() * int(count) + 1)
-        # print(id)/
-        c.execute("select * from cards where id = ?", (id,) )
-        rows = c.fetchall()
-        print(rows)
-        numChosen+=1
+        id = int(random() * int(count))
+        num = validIdNumbers[id]
+        c.execute("select name from cards where id = ?", (num,) )
+        name = c.fetchone()
+        cardsInSets.append(name[0])
+        numChosen += 1
+
+    print(cardsInSets)
+
 
 
 
