@@ -11,8 +11,9 @@ db = sqlite3.connect("cards.db")
 c = db.cursor()
 
 m = Tk()
-top = PanedWindow(orient = VERTICAL)
+overall = PanedWindow(orient = HORIZONTAL)
 cardDisplay = PanedWindow(orient = HORIZONTAL)
+cardDisplay2 = PanedWindow(orient = HORIZONTAL)
 
 promo = IntVar()
 dominion       = IntVar()
@@ -25,15 +26,15 @@ seaside        = IntVar()
 alchemy        = IntVar()
 checked = [promo, dominion, dark_ages, hinterlands, prosperity, cornucopia, intrigue, seaside, alchemy]
 
-cb1 = Checkbutton(top,text = "Promo", variable=promo)
-cb2 = Checkbutton(top,text = "Dominion", variable=dominion)
-cb3 = Checkbutton(top,text = "Dark Ages", variable=dark_ages)
-cb4 = Checkbutton(top,text = "Hinterlands", variable=hinterlands)
-cb5 = Checkbutton(top,text = "Prosperity", variable=prosperity)
-cb6 = Checkbutton(top,text = "Cornucopia", variable=cornucopia)
-cb7 = Checkbutton(top,text = "Intrigue", variable=intrigue)
-cb8 = Checkbutton(top,text = "Seaside", variable=seaside)
-cb9 = Checkbutton(top,text = "Alchemy", variable=alchemy)
+cb1 = Checkbutton(overall, text ="Promo", variable=promo)
+cb2 = Checkbutton(overall, text ="Dominion", variable=dominion)
+cb3 = Checkbutton(overall, text ="Dark Ages", variable=dark_ages)
+cb4 = Checkbutton(overall, text ="Hinterlands", variable=hinterlands)
+cb5 = Checkbutton(overall, text ="Prosperity", variable=prosperity)
+cb6 = Checkbutton(overall, text ="Cornucopia", variable=cornucopia)
+cb7 = Checkbutton(overall, text ="Intrigue", variable=intrigue)
+cb8 = Checkbutton(overall, text ="Seaside", variable=seaside)
+cb9 = Checkbutton(overall, text ="Alchemy", variable=alchemy)
 
 i = 0
 labels = []
@@ -43,9 +44,9 @@ while i < 10:
     url = "http://dominion.diehrstraits.com/scans/common/copper.jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((100, 225), Image.ANTIALIAS)
+    im = im.resize((120, 200), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
-    label = Label(m, image = ph)
+    label = Label(cardDisplay, image = ph)
     label.image = ph
     labels.append(label)
     # label.pack(side = RIGHT)
@@ -53,8 +54,8 @@ while i < 10:
 checkbuttons = [cb1, cb2, cb3, cb4,cb5,cb6,cb7,cb8,cb9]
 
 for butt in checkbuttons:
-    top.add(butt)
-var = StringVar();
+    overall.add(butt)
+var = StringVar()
 var.set("choose items then press generate")
 
 def showImage(name, i):
@@ -64,7 +65,7 @@ def showImage(name, i):
     url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((100, 225), Image.ANTIALIAS)
+    im = im.resize((120, 200), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
 
     labels[i].configure(image = ph)
@@ -120,10 +121,14 @@ def generateItems():
 # im = Image.open(BytesIO(response.content))
 # ph = ImageTk.PhotoImage(im)
 
-enter = Button(top, text="generate", command=generateItems)
-top.add(enter)
-top.pack(side = LEFT)
+enter = Button(overall, text="generate", command=generateItems)
+overall.add(enter)
+i = 0
 for label in labels:
-    label.pack(side = LEFT)
+        cardDisplay.add(label)
+
+# overall.add(cardDisplay)
+overall.pack(side = TOP)
+cardDisplay.pack(side = BOTTOM)
 # enter.pack(side = LEFT)
 m.mainloop()
