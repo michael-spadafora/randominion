@@ -41,6 +41,21 @@ for butt in checkbuttons:
 var = StringVar();
 var.set("choose items then press generate")
 
+def showImages(name):
+    label = Message(m, textvariable=var)
+    name = name.lower()
+    name = name.replace(" ", "")
+    url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
+    response = requests.get(url)
+    im = Image.open(BytesIO(response.content))
+    im = im.resize((250, 250), Image.ANTIALIAS)
+    ph = ImageTk.PhotoImage(im)
+
+    label = Label(m, image=ph)
+    label.image = ph
+    label.pack(side=RIGHT)
+
+
 def getCheckedButtons():
     checkedarr = []
     i = 0
@@ -76,20 +91,18 @@ def generateItems():
         numChosen += 1
 
     print(cardsInSets)
+    for card in cardsInSets:
+        showImages(card)
 
+# label = Message(m, textvariable=var)
+# name = "Smithy"
+# url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
+# response = requests.get(url)
+# im = Image.open(BytesIO(response.content))
+# ph = ImageTk.PhotoImage(im)
 
-label = Message(m, textvariable = var)
-enter = Button(top, text= "generate", command = generateItems)
+enter = Button(top, text="generate", command=generateItems)
 top.add(enter)
-url = "http://dominion.diehrstraits.com/scans/base/cellar.jpg"
-response = requests.get(url)
-im = Image.open(BytesIO(response.content))
-ph = ImageTk.PhotoImage(im)
-
-label = Label(m, image=ph)
-label.image=ph
-
 top.pack(side = LEFT)
 # enter.pack(side = LEFT)
-label.pack(side = RIGHT)
 m.mainloop()
