@@ -48,7 +48,7 @@ def showImages(name):
     url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((250, 250), Image.ANTIALIAS)
+    im = im.resize((100, 250), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
 
     label = Label(m, image=ph)
@@ -87,6 +87,8 @@ def generateItems():
         num = validIdNumbers[id]
         c.execute("select name from cards where id = ?", (num,) )
         name = c.fetchone()
+        if name in cardsInSets:
+            continue
         cardsInSets.append(name[0])
         numChosen += 1
 
