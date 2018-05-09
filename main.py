@@ -39,16 +39,18 @@ cb9 = Checkbutton(overall, text ="Alchemy", variable=alchemy)
 i = 0
 labels = []
 while i < 10:
-
-    i+=1
     url = "http://dominion.diehrstraits.com/scans/common/copper.jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((120, 200), Image.ANTIALIAS)
+    im = im.resize((150, 250), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
-    label = Label(cardDisplay, image = ph)
+    if i < 5:
+        label = Label(cardDisplay, image = ph)
+    else:
+        label = Label(cardDisplay2, image = ph)
     label.image = ph
     labels.append(label)
+    i+=1
     # label.pack(side = RIGHT)
 
 checkbuttons = [cb1, cb2, cb3, cb4,cb5,cb6,cb7,cb8,cb9]
@@ -65,7 +67,7 @@ def showImage(name, i):
     url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((120, 200), Image.ANTIALIAS)
+    im = im.resize((150, 250), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
 
     labels[i].configure(image = ph)
@@ -125,10 +127,15 @@ enter = Button(overall, text="generate", command=generateItems)
 overall.add(enter)
 i = 0
 for label in labels:
+    if i < 5:
         cardDisplay.add(label)
-
+    else:
+        cardDisplay2.add(label)
+    i+=1
 # overall.add(cardDisplay)
 overall.pack(side = TOP)
 cardDisplay.pack(side = BOTTOM)
+cardDisplay2.pack(side = BOTTOM)
+
 # enter.pack(side = LEFT)
 m.mainloop()
