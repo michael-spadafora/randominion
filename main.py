@@ -12,6 +12,7 @@ c = db.cursor()
 
 m = Tk()
 top = PanedWindow(orient = VERTICAL)
+cardDisplay = PanedWindow(orient = HORIZONTAL)
 
 promo = IntVar()
 dominion       = IntVar()
@@ -34,6 +35,21 @@ cb7 = Checkbutton(top,text = "Intrigue", variable=intrigue)
 cb8 = Checkbutton(top,text = "Seaside", variable=seaside)
 cb9 = Checkbutton(top,text = "Alchemy", variable=alchemy)
 
+i = 0
+labels = []
+while i < 10:
+
+    i+=1
+    url = "http://dominion.diehrstraits.com/scans/common/copper.jpg"
+    response = requests.get(url)
+    im = Image.open(BytesIO(response.content))
+    im = im.resize((100, 225), Image.ANTIALIAS)
+    ph = ImageTk.PhotoImage(im)
+    label = Label(m, image = ph)
+    label.image = ph
+    labels.append(label)
+    # label.pack(side = RIGHT)
+
 checkbuttons = [cb1, cb2, cb3, cb4,cb5,cb6,cb7,cb8,cb9]
 
 for butt in checkbuttons:
@@ -41,19 +57,18 @@ for butt in checkbuttons:
 var = StringVar();
 var.set("choose items then press generate")
 
-def showImages(name):
-    label = Message(m, textvariable=var)
+def showImage(name, i):
+
     name = name.lower()
     name = name.replace(" ", "")
     url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
-    im = im.resize((100, 250), Image.ANTIALIAS)
+    im = im.resize((100, 225), Image.ANTIALIAS)
     ph = ImageTk.PhotoImage(im)
 
-    label = Label(m, image=ph)
-    label.image = ph
-    label.pack(side=RIGHT)
+    labels[i].configure(image = ph)
+    labels[i].image = ph
 
 
 def getCheckedButtons():
@@ -87,14 +102,16 @@ def generateItems():
         num = validIdNumbers[id]
         c.execute("select name from cards where id = ?", (num,) )
         name = c.fetchone()
-        if name in cardsInSets:
+        if name[0] in cardsInSets:
             continue
         cardsInSets.append(name[0])
         numChosen += 1
 
     print(cardsInSets)
+    i = 0
     for card in cardsInSets:
-        showImages(card)
+        showImage(card , i)
+        i+=1
 
 # label = Message(m, textvariable=var)
 # name = "Smithy"
@@ -106,5 +123,7 @@ def generateItems():
 enter = Button(top, text="generate", command=generateItems)
 top.add(enter)
 top.pack(side = LEFT)
+for label in labels:
+    label.pack(side = LEFT)
 # enter.pack(side = LEFT)
 m.mainloop()
