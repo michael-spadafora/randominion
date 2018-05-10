@@ -60,11 +60,23 @@ for butt in checkbuttons:
 var = StringVar()
 var.set("choose items then press generate")
 
-def showImage(name, i):
+def showImage(info, i):
+    set = info[0]
+    name = info[1]
 
+    if set == "Dominion":
+        set = "Base"
+
+    set = set.lower()
     name = name.lower()
     name = name.replace(" ", "")
-    url = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
+    set = set.replace(" ", "")
+
+    url = "http://dominion.diehrstraits.com/scans/" + set + "/" + name + ".jpg"
+
+    # url2 = "http://dominion.diehrstraits.com/scans/base/" + name + ".jpg"
+    # if url != url2:
+    #     print("ERROR")
     response = requests.get(url)
     im = Image.open(BytesIO(response.content))
     im = im.resize((150, 250), Image.ANTIALIAS)
@@ -103,11 +115,13 @@ def generateItems():
     while (numChosen < 10):
         id = int(random() * int(count))
         num = validIdNumbers[id]
-        c.execute("select name from cards where id = ?", (num,) )
+        c.execute("select expansion, name from cards where id = ?", (num,) )
         name = c.fetchone()
-        if name[0] in cardsInSets:
+        # print(name[1])
+        if name in cardsInSets:
             continue
-        cardsInSets.append(name[0])
+
+        cardsInSets.append(name)
         numChosen += 1
 
     print(cardsInSets)
