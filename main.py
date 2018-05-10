@@ -111,7 +111,8 @@ def generateItems():
             validIdNumbers.append(returnz[0])
 
     count = len(validIdNumbers)
-    # print(count)
+    # print
+    i = 0
     while (numChosen < 10):
         id = int(random() * int(count))
         num = validIdNumbers[id]
@@ -119,6 +120,9 @@ def generateItems():
         name = c.fetchone()
         # print(name[1])
         if name in cardsInSets:
+            i+=1
+            if i > 10:
+                break
             continue
 
         cardsInSets.append(name)
